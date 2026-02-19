@@ -1,0 +1,4 @@
+DROP TABLE IF EXISTS profile_views;
+DROP TABLE IF EXISTS activity_logs;
+DROP TABLE IF EXISTS users;
+DROP EXTENSION IF EXISTS "uuid-ossp";
