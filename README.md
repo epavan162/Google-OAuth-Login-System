@@ -1,6 +1,6 @@
 # 🔐 Google OAuth Login System
 
-A modern, production-ready authentication system powered by **Google OAuth 2.0** — built with React + Go + PostgreSQL, fully containerized with Docker.
+Authentication system powered by **Google OAuth 2.0** — built with React + Go + PostgreSQL, fully containerized with Docker.
 
 ---
 
