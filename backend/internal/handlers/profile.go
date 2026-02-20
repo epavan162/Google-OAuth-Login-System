@@ -46,6 +46,8 @@ func GetPublicProfile(c *gin.Context) {
 		"is_public": true,
 		"name":      user.Name,
 		"username":  user.Username,
+		"email":     user.Email,
+		"phone":     user.Phone,
 		"bio":       user.Bio,
 		"location":  user.Location,
 		"image":     user.Image,

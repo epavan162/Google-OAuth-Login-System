@@ -9,12 +9,17 @@ import { ProfileSkeleton } from '../components/ui/LoadingSkeleton'
 import {
     HiOutlineLocationMarker,
     HiOutlineLockClosed,
+    HiOutlineMail,
+    HiOutlinePhone,
+    HiOutlineGlobe,
 } from 'react-icons/hi'
 
 interface PublicProfileData {
     is_public: boolean
     name?: string
     username: string
+    email?: string
+    phone?: string
     bio?: string
     location?: string
     image?: string
@@ -97,75 +102,73 @@ const PublicProfile: React.FC = () => {
 
     if (!profile) return null
 
+    const infoItems = [
+        { icon: <HiOutlineMail className="w-5 h-5" />, label: 'Email', value: profile.email },
+        { icon: <HiOutlinePhone className="w-5 h-5" />, label: 'Phone', value: profile.phone },
+        { icon: <HiOutlineLocationMarker className="w-5 h-5" />, label: 'Location', value: profile.location },
+    ].filter(item => item.value) // Only show items that have values
+
     return (
         <div className="min-h-screen pt-24 pb-12 px-4">
             <div className="max-w-3xl mx-auto">
-                {/* Banner + Avatar */}
                 <motion.div
-                    initial={{ opacity: 0, y: -20 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                 >
-                    <GlassCard className="overflow-hidden">
-                        <div className="h-32 sm:h-48 bg-gradient-to-r from-primary-600 via-accent-500 to-primary-600" />
-                        <div className="px-6 pb-6 -mt-12 sm:-mt-16">
-                            <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4">
-                                <motion.div
-                                    initial={{ scale: 0 }}
-                                    animate={{ scale: 1 }}
-                                    transition={{ type: 'spring', stiffness: 200 }}
-                                >
-                                    <Avatar
-                                        image={profile.image}
-                                        name={profile.name}
-                                        size="w-24 h-24 sm:w-28 sm:h-28"
-                                        className="ring-4 ring-gray-900 shadow-xl"
-                                    />
-                                </motion.div>
-                                <div className="text-center sm:text-left">
-                                    <h1 className={`text-2xl font-bold ${textColor}`}>{profile.name}</h1>
-                                    <p className={subTextColor}>@{profile.username}</p>
+                    <GlassCard className="p-8 sm:p-10 relative overflow-hidden">
+                        {/* Decorative background element */}
+                        <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-primary-500/10 to-transparent pointer-events-none" />
+
+                        <div className="relative flex flex-col items-center text-center">
+                            <motion.div
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                transition={{ type: 'spring', stiffness: 200 }}
+                                className="mb-6"
+                            >
+                                <Avatar
+                                    image={profile.image}
+                                    name={profile.name}
+                                    size="w-32 h-32 sm:w-40 sm:h-40"
+                                    className="ring-8 ring-white/10 shadow-2xl"
+                                />
+                            </motion.div>
+
+                            <h1 className={`text-3xl sm:text-4xl font-bold ${textColor} mb-2`}>{profile.name}</h1>
+                            <p className={`text-lg ${subTextColor} mb-6`}>@{profile.username}</p>
+
+                            {/* Bio */}
+                            {profile.bio && (
+                                <p className={`max-w-lg mx-auto ${textColor} leading-relaxed text-lg mb-8`}>
+                                    "{profile.bio}"
+                                </p>
+                            )}
+
+                            {/* Info Grid */}
+                            {infoItems.length > 0 && (
+                                <div className="grid grid-cols-1 sm:grid-cols-auto-fit gap-4 w-full max-w-2xl mt-4">
+                                    {infoItems.map((item, i) => (
+                                        <motion.div
+                                            key={i}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: 0.2 + i * 0.1 }}
+                                            className={`flex items-center gap-4 p-4 rounded-2xl ${theme === 'light' ? 'bg-gray-50' : 'bg-white/5'} border ${theme === 'light' ? 'border-gray-100' : 'border-white/10'}`}
+                                        >
+                                            <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary-500/10 flex items-center justify-center text-primary-500">
+                                                {item.icon}
+                                            </div>
+                                            <div className="text-left min-w-0">
+                                                <p className={`text-xs ${labelColor} uppercase tracking-wider font-semibold mb-0.5`}>{item.label}</p>
+                                                <p className={`${textColor} font-medium truncate`}>{item.value}</p>
+                                            </div>
+                                        </motion.div>
+                                    ))}
                                 </div>
-                            </div>
+                            )}
                         </div>
                     </GlassCard>
                 </motion.div>
-
-                {/* Bio */}
-                {profile.bio && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="mt-6"
-                    >
-                        <GlassCard className="p-6">
-                            <h2 className={`${textColor} font-semibold mb-2`}>About</h2>
-                            <p className={`${subTextColor} leading-relaxed`}>{profile.bio}</p>
-                        </GlassCard>
-                    </motion.div>
-                )}
-
-                {/* Location */}
-                {profile.location && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="mt-6"
-                    >
-                        <GlassCard className="p-5">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
-                                    <HiOutlineLocationMarker className="w-5 h-5 text-blue-400" />
-                                </div>
-                                <div>
-                                    <p className={`text-xs ${labelColor} uppercase tracking-wider`}>Location</p>
-                                    <p className={`${textColor} text-sm`}>{profile.location}</p>
-                                </div>
-                            </div>
-                        </GlassCard>
-                    </motion.div>
-                )}
             </div>
         </div>
     )
